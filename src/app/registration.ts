@@ -1,11 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ApiService } from './services/api';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RegistrationService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
-
-  constructor(private http: HttpClient) {}
+  constructor(private api: ApiService) {}
 
   register(data: {
     name: string;
@@ -15,7 +14,7 @@ export class RegistrationService {
     age: number;
     birthday: string;
     contact_number: string;
-  }) {
-    return this.http.post(`${this.apiUrl}/register`, data);
+  }): Observable<any> {
+    return this.api.register(data);
   }
 }

@@ -1,9 +1,8 @@
-import { Component, OnInit,signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router'; //
-import { ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../services/api';
 
 @Component({
   selector: 'app-students',
@@ -13,29 +12,28 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './student-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class Students implements OnInit {
   students = signal<any[]>([]);
   isLoading = signal(true);
   errorMsg = signal('');
   selectedStudent = signal<any>(null);
-  showmodal= signal(false);
-
-   private apiUrl = 'http://127.0.0.1:8000/api';
+  showmodal = signal(false);
 
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
     private router: Router
   ) {}
 
+  goHome() {
+    this.router.navigate(['/']);
+  }
 
-
-   ngOnInit() {
+  ngOnInit() {
     this.loadStudents();
-   }
+  }
 
-   loadStudents(){
-    this.http.get<any[]>(`${this.apiUrl}/students`).subscribe({
+  loadStudents() {
+    this.api.getStudents().subscribe({
       next: (data) => {
         this.students.set(data);
         this.isLoading.set(false);
@@ -49,28 +47,28 @@ export class Students implements OnInit {
     });
   }
 
-  editstudent(student: any) {
-    this.selectedStudent.set({...student});
+  editStudent(student: any) {
+    this.selectedStudent.set({ ...student });
     this.showmodal.set(true);
   }
 
-  saveStudent(){
+  saveStudent() {
     const student = this.selectedStudent();
-    this.http.put(`${this.apiUrl}/students/${student.id}`, student).subscribe({
+    this.api.updateStudent(student.id, student).subscribe({
       next: () => {
         this.loadStudents();
         this.showmodal.set(false);
         console.log('Student updated!');
       },
       error: (err) => {
-        console.error ('Error Updating Students',err);
+        console.error('Error updating student:', err);
       }
-  });
-}
+    });
+  }
 
-deleteStudent(id: number) {
+  deleteStudent(id: number) {
     if (confirm('Are you sure you want to delete this student?')) {
-      this.http.delete(`${this.apiUrl}/students/${id}`).subscribe({
+      this.api.deleteStudent(id).subscribe({
         next: () => {
           this.loadStudents();
           console.log('Student deleted!');
@@ -84,8 +82,5 @@ deleteStudent(id: number) {
 
   closeModal() {
     this.showmodal.set(false);
-  }
-  goHome() {
-    this.router.navigate(['/']);
   }
 }
