@@ -1,0 +1,184 @@
+.students-container {
+  padding: 30px;
+  background-image: url(https://tse3.mm.bing.net/th/id/OIP.0ehNbvweAFVhwiB4zJRPjQHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3);
+  min-height: 100vh;
+  color: #fff;
+}
+
+.students-title {
+  text-align: left;
+  font-size: 60px;
+  color: #f80303;
+  margin-bottom: 20px;
+  font-family: 'Lauren';
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.429);
+
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table th {
+  background: #f80303c3;
+  color: #000000;
+  padding: 12px;
+  text-align: left;
+  font-family:' laruen';
+  font-weight: 400;
+  font-size: 25px;
+}
+
+.students-table td {
+  padding: 12px;
+  color: #000000;
+  border: 1px solid;
+}
+
+.students-table tr{
+  background-color: #ffffff;
+}
+.students-table tr:hover {
+  background: #bfbfbf;
+}
+
+.back-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.back-btn:hover {
+  background: #f80303;
+  border-color: #f80303;
+}
+
+.edit-btn {
+  background: #f8a000;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 15px;
+}
+
+.edit-btn:hover {
+  background: #c07800;
+}
+
+.delete-btn {
+  background: #f80303;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.delete-btn:hover {
+  background: #a00000;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: #111;
+  padding: 30px;
+  width: 500px;
+  border-radius: 8px;
+  border: 1px solid #f80303;
+}
+
+.modal-title {
+  color: #f80303;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Lauren', sans-serif;
+}
+
+.modal input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.save-btn {
+  background: #00a000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  font-size: 16px;
+}
+
+.save-btn:hover {
+  background: #007000;
+}
+
+.cancel-btn {
+  background: #f80303;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50%;
+  font-size: 16px;
+}
+
+.cancel-btn:hover {
+  background: #a00000;
+}
+
+.logo{
+  height: auto;
+  width: 70px;
+  margin-left: 0%;
+  margin-top: 0%;
+
+}
+
+.student-brand{
+ align-items: center;
+  display: flex;
+  gap: 1150px;
+  font-size: 30px;
+  font-family: 'Algerian';
+  position: fixed;
+  bottom: 10px;
+}

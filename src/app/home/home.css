@@ -1,0 +1,203 @@
+
+.home-container {
+  background-image: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGtoeWptYmg5azdiNmxmbDF2cm4xODgxeXVqYWRzY3F3MzBvdGZtOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/78nXADhnE4BQfG4gup/giphy.gif');
+  padding: 60px;
+  text-align: center;
+  min-height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.Home-title {
+  color: #fe0303;
+  font-family: 'Algerian';
+  font-size: 140px;
+  margin-bottom: 10px;
+  position: relative;
+  top: 170px;
+  -webkit-text-stroke: 1px rgba(39, 38, 38, 0.67);
+}
+
+.Home-subtitle {
+  color: #ccc;
+  font-size: 40px;
+  margin-bottom: 30px;
+  position: relative;
+  font-family: 'Lauren';
+  top: 170px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: 1px rgba(39, 38, 38, 0.67);
+}
+
+.landing-btn {
+  border: none;
+  padding: 15px 10px;
+  font-size: 18px;
+  font-family: 'Lauren', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.register-btn {
+  background: trasparent;
+  color: #f7f7f7;
+  border-radius: 5px;;
+  font-family: 'Lauren';
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.register-btn:hover {
+  background: #ff0000;
+}
+
+.students-btn {
+  background: trasparent;
+  color: #ffffff;
+  border-radius: 5px;;
+  font-family: 'Lauren';
+  margin-top: 10px;
+  font-size: 15px;
+}
+
+.students-btn:hover {
+  background: #ff0000;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgb(0, 0, 0);
+  padding: 10px 30px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  right: 10px;
+}
+
+.nav-brand {
+    align-items: center;
+    display: flex;
+    gap: 15px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+
+.web-title{
+  font-family: Lauren;
+  font-size: 20px;
+  color: #f0f0f0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+
+.pin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.pin-modal {
+  background: #111;
+  padding: 40px;
+  width: 350px;
+  border-radius: 8px;
+  border: 2px solid #f80303;
+  text-align: center;
+}
+
+.pin-title {
+  color: #f80303;
+  font-family: 'Lauren', sans-serif;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.pin-subtitle {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.pin-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 24px;
+  text-align: center;
+  background: #222;
+  border: 2px solid #444;
+  color: #fff;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  letter-spacing: 8px;
+  box-sizing: border-box;
+}
+
+.pin-input:focus {
+  border-color: #f80303;
+  outline: none;
+}
+
+.pin-error {
+  color: salmon;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.pin-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.pin-confirm-btn {
+  background: #f80303;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 50%;
+  font-size: 16px;
+  font-family: 'Lauren', sans-serif;
+}
+
+.pin-confirm-btn:hover {
+  background: #a00000;
+}
+
+.pin-cancel-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 50%;
+  font-size: 16px;
+  font-family: 'Lauren', sans-serif;
+}
+
+.pin-cancel-btn:hover {
+  background: #333;
+}

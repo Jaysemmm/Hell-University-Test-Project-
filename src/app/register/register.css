@@ -1,0 +1,123 @@
+
+.center-viewport {
+  text-align: left;
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.header-container .logo {
+  width: 80px;   /* Adjust size */
+  height: auto;  /* Keeps proportions */
+  margin-bottom: 10px; /* Space between logo and text */
+  position: relative;
+  top: 10px; /* Adjust vertical position */
+  right: 20px; /* Adjust horizontal position */
+}
+
+.form-title {
+  bottom: 20px;
+  font-size: 40px;
+  font-weight: 600;
+  font-family: 'Lauren';
+  color: #f80303;
+}
+
+.header-container {
+  bottom: 20px;
+  background: rgb(0, 0, 0); /* Black banner */
+  color: #fff;
+  padding: 10px;
+  width: 709.px; /* Fixed width */
+  height: 85px; /* Banner height */
+  margin: 20px auto;
+  position: relative;
+  z-index: 10;
+  font-size: 60px;
+  display: flex;              /* Enables side-by-side layout */
+  align-items: center;        /* Vertically center logo + text */
+  justify-content: flex-start;/* Align items to the left */
+  font-family: 'Algerian';
+  right: 1.2%;
+  top: 5px;
+}
+
+.header-container .logo {
+  width: 150px;   /* Adjust logo size */
+  height: 150px;  /* Set fixed height */
+  margin-right: 20px; /* Space between logo and text */
+}
+
+.register-background {
+  background-image :url(https://img.freepik.com/free-photo/horror-scene-with-eerie-classroom_23-2150975102.jpg?semt=ais_hybrid);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.error-message {
+  color: rgb(251, 25, 0);
+  font-size: 12px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+
+.form-container {
+  width:  710px;
+  height: 1000px;
+  background: rgba(0, 0, 0, 0.781);
+  padding: 5px;
+  box-shadow: 0 4px 6px rgba(16, 11, 11, 0.1);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: fixed;
+  top: 500px;
+  right: 5%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+.form-container input,
+.form-container button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  color: #f7f4f4;
+  font-family: 'Lauren', sans-serif;
+  background-color: rgba(20,20,20,0.8);
+}
+
+.form-container input::placeholder {
+  color: #ddd;
+}
+
+.back-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  background: #f80303;
+}
+
+.register-page {
+  position: relative;
+  min-height: 100vh;
+}
+

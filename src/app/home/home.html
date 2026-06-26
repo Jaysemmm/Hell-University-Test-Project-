@@ -1,0 +1,39 @@
+<div class="home-container">
+    <nav class="navbar">
+      <div class="nav-brand">
+      <img src="https://marketplace.canva.com/EAFMBPj86jM/1/0/800w/canva-black-white-minimalist-university-logo-design-yllDd8VHxjE.jpg" alt="University Logo" class="logo">
+    <span class="web-title">HELL UNIVERSITY REGISTRATION SYSTEM</span>
+    </div>
+      <div class="nav-links">
+      <button class="landing-btn register-btn" (click)="goToRegister()">REGISTER </button>
+      <button class="landing-btn students-btn" (click)="goToStudents()">STUDENTS</button>
+    </div>
+    </nav>
+     <div class="Home-content">
+    <h1 class="Home-title">HELL UNIVERSITY</h1>
+    <p class="Home-subtitle">Welcome to Hell University Registration System</p>
+  </div>
+
+  <div class="pin-overlay" *ngIf="showPinModal()">
+    <div class="pin-model">
+      <h2 class="pin-title">ADMIN ACCESS</h2>
+      <p class="pin-subtitle">Enter PIN to view students</p>
+
+    <input
+    type="password"
+    class="pin-input"
+    placeholder="ENTER PIN"
+    [value]="pin()"
+    (input)="pin.set($any($event.target).value)"
+    maxlength="4"
+    />
+
+    <p *ngIf="pinError()" class="pin-error">{{ pinError()}}</p>
+
+    <div class="pin-buttons">
+      <button class="pin-confirm-btn" (click)="confirmPin()">CONFIRM</button>
+      <button class="pin-cancel-btn" (click)="closePinModal()">CANCEL</button>
+    </div>
+    </div>
+  </div>
+</div>

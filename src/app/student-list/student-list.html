@@ -1,0 +1,78 @@
+<div class="students-container">
+
+  <h1 class="students-title">REGISTERED STUDENTS</h1>
+
+  <!-- Loading state -->
+  <p *ngIf="isLoading()" style="color: white; text-align: center;">
+    Loading students...
+  </p>
+
+  <!-- Error state -->
+  <p *ngIf="errorMsg()" style="color: salmon; text-align: center;">
+    {{ errorMsg() }}
+  </p>
+
+  <!-- Table — signals use () to read value -->
+  <table class="students-table" *ngIf="!isLoading() && students().length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Year Level</th>
+        <th>Department</th>
+        <th>Age</th>
+        <th>Birthday</th>
+        <th>Contact</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- signals() to read the array -->
+      <tr *ngFor="let student of students()">
+        <td>{{ student.id }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.email }}</td>
+        <td>{{ student.year_level }}</td>
+        <td>{{ student.department }}</td>
+        <td>{{ student.age }}</td>
+        <td>{{ student.birthday }}</td>
+        <td>{{ student.contact_number }}</td>
+        <td>
+          <button class="edit-btn" (click)="editstudent(student)">Edit</button>
+          <button class="delete-btn" (click)="deleteStudent(student.id)">Delete</button>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Empty state -->
+  <p *ngIf="!isLoading() && students().length === 0" style="color: white; text-align: center;">
+    No students registered yet.
+  </p>
+
+  <div class="modal-overlay" *ngIf="showmodal()">
+    <div class="modal">
+      <h2 class="modal-title">EDIT STUDENT</h2>
+
+      <input type="text" [(ngModel)]="selectedStudent().name" placeholder="Name" />
+      <input type="email" [(ngModel)]="selectedStudent().email" placeholder="Email" />
+      <input type="text" [(ngModel)]="selectedStudent().year_level" placeholder="Year Level" />
+      <input type="text" [(ngModel)]="selectedStudent().department" placeholder="Department" />
+      <input type="number" [(ngModel)]="selectedStudent().age" placeholder="Age" />
+      <input type="date" [(ngModel)]="selectedStudent().birthday" />
+      <input type="text" [(ngModel)]="selectedStudent().contact_number" placeholder="Contact Number" />
+
+      <div class="modal-buttons">
+        <button class="save-btn" (click)="saveStudent()">SAVE</button>
+        <button class="cancel-btn" (click)="closeModal()">CANCEL</button>
+      </div>
+    </div>
+  </div>
+<button class="back-btn" (click)="goHome()">← BACK</button>
+
+<div class="student-brand">
+      <img src="https://marketplace.canva.com/EAFMBPj86jM/1/0/800w/canva-black-white-minimalist-university-logo-design-yllDd8VHxjE.jpg" alt="University Logo" class="logo">
+    <span class="web-title">HELL UNIVERSITY</span>
+    </div>
+</div>

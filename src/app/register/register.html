@@ -1,0 +1,47 @@
+<div class="register-page">
+
+  <div class="register-background"></div>
+
+  <div class="form-container">
+
+    <div class="header-container">
+      <img src="https://marketplace.canva.com/EAFMBPj86jM/1/0/800w/canva-black-white-minimalist-university-logo-design-yllDd8VHxjE.jpg" alt="University Logo" class="logo" />
+      <h1>HELL UNIVERSITY</h1>
+    </div>
+
+    <form class="center-viewport" [formGroup]="registrationform" (ngSubmit)="onSubmit()">
+      <h2><span class="form-title">REGISTRATION FORM</span></h2>
+
+      <p *ngIf="successMessage" class="success-message" style="color: greenyellow;">{{ successMessage }}</p>
+      <p *ngIf="errorMessage" class="error-message" style="color: rgb(251, 25, 0);">{{ errorMessage }}</p>
+
+      <div class="form-group">
+        <input type="text" formControlName="name" placeholder="Enter your full name" />
+        <small *ngIf="registrationform.get('name')?.invalid && registrationform.get('name')?.touched" class="error-message">Name is required.</small>
+
+        <input type="text" formControlName="year_level" placeholder="Enter your year level" />
+        <small *ngIf="registrationform.get('year_level')?.invalid && registrationform.get('year_level')?.touched" class="error-message">Year level is required.</small>
+
+        <input type="email" formControlName="email" placeholder="Enter your email" />
+        <small *ngIf="registrationform.get('email')?.invalid && registrationform.get('email')?.touched" class="error-message">Enter a valid email address.</small>
+
+        <input type="text" formControlName="department" placeholder="Enter your department" />
+        <small *ngIf="registrationform.get('department')?.invalid && registrationform.get('department')?.touched" class="error-message">Department is required.</small>
+
+        <input type="number" formControlName="age" placeholder="Enter your age" />
+        <small *ngIf="registrationform.get('age')?.invalid && registrationform.get('age')?.touched" class="error-message">Age is required.</small>
+
+        <input type="date" formControlName="birthday" />
+        <small *ngIf="registrationform.get('birthday')?.invalid && registrationform.get('birthday')?.touched" class="error-message">Birthday is required.</small>
+
+        <input type="text" formControlName="contact_number" placeholder="Enter your contact number" />
+        <small *ngIf="registrationform.get('contact_number')?.invalid && registrationform.get('contact_number')?.touched" class="error-message">Contact number is required.</small>
+
+        <button type="submit">Register</button>
+         <button class="back-btn" (click)="goHome()">← BACK</button>
+      </div>
+    </form>
+
+  </div>
+
+</div>
