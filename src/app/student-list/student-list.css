@@ -21,8 +21,8 @@
 }
 
 .students-table th {
-  background: #f80303c3;
-  color: #000000;
+  background-image: url(https://wallpaperaccess.com/full/826852.jpg);
+  color: #ffffff;
   padding: 12px;
   text-align: left;
   font-family:' laruen';
@@ -37,7 +37,7 @@
 }
 
 .students-table tr{
-  background-color: #ffffff;
+  background-image: url(https://i.pinimg.com/originals/bc/fa/27/bcfa277eaa73a8981aa411fcb7633c8d.jpg);
 }
 .students-table tr:hover {
   background: #bfbfbf;
