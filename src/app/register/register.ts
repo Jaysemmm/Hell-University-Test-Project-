@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RegistrationService } from '../registration';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router'; // ✅ Added
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -51,11 +51,20 @@ export class Register {
           this.errorMessage = '';
           this.registrationform.reset();
           console.log('Success!', res);
+
+        setTimeout(() => {
+          this.successMessage= '';
+        }, 1000);
         },
+
         error: (err) => {
           this.errorMessage = 'Registration Denied. Try again.';
           this.successMessage = '';
           console.error('Error:', err);
+
+        setTimeout ( () => {
+          this.errorMessage = '';
+        },1000);
         }
       });
     } else {
