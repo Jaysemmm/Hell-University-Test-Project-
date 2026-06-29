@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../Back-End"
+		},
+		{
+			"path": "../../infra"
 		}
 	],
 	"settings": {}
