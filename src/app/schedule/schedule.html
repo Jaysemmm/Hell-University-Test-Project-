@@ -1,0 +1,93 @@
+<div class="schedule-container">
+<h1 class="schedule-title">CLASS SCHEDULE</h1>
+
+  <button class="add-btn" *ngIf="!isAdmin()" (click)="openPinModal()">ADMIN ACCESS</button>
+  <button class="add-btn" *ngIf="isAdmin()" (click)="openCreateModal()">CREATE SCHEDULE</button>
+  <button class="done-btn" *ngIf="isAdmin()" (click)="exitAdminMode()">DONE</button>
+
+
+  <p *ngIf="isLoading()" style="color: white; text-align: center;">Loading schedules...</p>
+
+  <table class="schedule-table" *ngIf="!isLoading() && schedules().length > 0">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Room</th>
+        <th>Instructor</th>
+        <th>Students</th>
+        <th *ngIf="isAdmin()">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of schedules()">
+        <td>{{ s.day }}</td>
+        <td>{{ s.start_time }}</td>
+        <td>{{ s.end_time }}</td>
+        <td>{{ s.room }}</td>
+        <td>{{ s.instructor }}</td>
+        <td>{{ s.students.length }} student(s)</td>
+        <!-- Edit/Delete only visible if admin -->
+        <td *ngIf="isAdmin()">
+          <button class="edit-btn" (click)="openEditModal(s)">✏️ Edit</button>
+          <button class="delete-btn" (click)="deleteSchedule(s.id)">🗑️ Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!isLoading() && schedules().length === 0" style="color: white; text-align: center;">
+    No schedules yet.
+  </p>
+
+  <!-- PIN Modal -->
+  <div class="modal-overlay" *ngIf="showPinModal()">
+    <div class="modal">
+      <h2 class="modal-title">🔒 ADMIN ACCESS</h2>
+      <p style="color: #ccc; font-size: 14px; margin-bottom: 15px;">
+        Enter PIN to edit, create, or delete schedules.
+      </p>
+
+      <input
+        type="password"
+        placeholder="Enter PIN"
+        [value]="pin()"
+        (input)="pin.set($any($event.target).value)"
+        maxlength="4"
+      />
+
+      <p *ngIf="pinError()" style="color: salmon; font-size: 13px;">{{ pinError() }}</p>
+
+      <div class="modal-buttons">
+        <button class="save-btn" (click)="confirmPin()">CONFIRM</button>
+        <button class="cancel-btn" (click)="closePinModal()">CANCEL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create/Edit Schedule Modal -->
+  <div class="modal-overlay" *ngIf="showModal()">
+    <div class="modal">
+      <h2 class="modal-title">{{ isEditing() ? 'EDIT SCHEDULE' : 'CREATE SCHEDULE' }}</h2>
+
+      <input type="text" [(ngModel)]="newSchedule.day" placeholder="Day (e.g. Monday)" />
+      <input type="text" [(ngModel)]="newSchedule.start_time" placeholder="Start Time (e.g. 08:00 AM)" />
+      <input type="text" [(ngModel)]="newSchedule.end_time" placeholder="End Time (e.g. 09:30 AM)" />
+      <input type="text" [(ngModel)]="newSchedule.room" placeholder="Room" />
+      <input type="text" [(ngModel)]="newSchedule.instructor" placeholder="Instructor" />
+
+      <div class="modal-buttons">
+        <button class="save-btn" (click)="saveSchedule()">✅ SAVE</button>
+        <button class="cancel-btn" (click)="closeModal()">❌ CANCEL</button>
+      </div>
+    </div>
+  </div>
+   <button class="back-btn" (click)="goHome()">← BACK</button>
+<div class="schedule-brand">
+    <img src="https://marketplace.canva.com/EAFMBPj86jM/1/0/800w/canva-black-white-minimalist-university-logo-design-yllDd8VHxjE.jpg" alt="University Logo" class="logo">
+    <span>HELL UNIVERSITY</span>
+  </div>
+
+
+</div>

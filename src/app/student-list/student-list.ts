@@ -2,7 +2,7 @@ import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../services/api';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-students',

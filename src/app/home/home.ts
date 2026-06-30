@@ -32,6 +32,11 @@ export class Home {
     this.pinError.set('');
 
   }
+
+  goToSchedule() {
+  this.router.navigate(['/schedule']);
+}
+
  confirmPin(){
   if (this.pin() === this.correctPIn){
     this.showPinModal.set(false);
