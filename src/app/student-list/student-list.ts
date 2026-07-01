@@ -2,7 +2,7 @@ import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../services/api';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-students',
@@ -33,20 +33,19 @@ export class Students implements OnInit {
   }
 
   loadStudents() {
-    this.api.getStudents().subscribe({
-      next: (data) => {
-        this.students.set(data);
-        this.isLoading.set(false);
-        console.log('Students loaded!', data);
-      },
-      error: (err) => {
-        this.errorMsg.set('Failed to load students!');
-        this.isLoading.set(false);
-        console.error('Error fetching students:', err);
-      }
-    });
-  }
-
+  this.api.getStudents().subscribe({
+    next: (data) => {
+      this.students.set(data);
+      this.isLoading.set(false);
+      console.log('Students loaded via GraphQL!', data);
+    },
+    error: (err) => {
+      this.errorMsg.set('Failed to load students!');
+      this.isLoading.set(false);
+      console.error('GraphQL Error:', err);
+    }
+  });
+}
   editStudent(student: any) {
     this.selectedStudent.set({ ...student });
     this.showmodal.set(true);
