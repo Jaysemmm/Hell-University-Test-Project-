@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
-// ===== Schedule GraphQL only =====
+//Schedule GraphQL only
 const GET_SCHEDULES = gql`
   query {
     schedules {
@@ -76,8 +76,8 @@ const DELETE_SCHEDULE = gql`
 `;
 
 const ASSIGN_STUDENT = gql`
-  mutation AssignStudentToSchedule($student_id: ID!, $schedule_id: ID) {
-    assignStudentToSchedule(student_id: $student_id, schedule_id: $schedule_id) {
+  mutation AssignStudentToSchedule($id: ID!, $schedule_id: ID) {
+    assignStudentToSchedule(id: $id, schedule_id: $schedule_id) {
       id
       name
     }
@@ -154,11 +154,13 @@ export class ApiService {
     });
   }
 
-  assignStudentToSchedule(studentId: number, scheduleId: number | null): Observable<any> {
-    return this.apollo.mutate({
-      mutation: ASSIGN_STUDENT,
-      variables: { student_id: studentId, schedule_id: scheduleId }
-    });
-  }
+ assignStudentToSchedule(studentId: number, scheduleId: number | null) {
+  return this.apollo.mutate({
+    mutation: ASSIGN_STUDENT,
+    variables: {
+      id: studentId,
+      schedule_id: scheduleId
+    }
+  });
 }
-
+}

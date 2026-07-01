@@ -13,6 +13,7 @@ import { ApiService } from '../services/api.service';
 })
 export class Schedule implements OnInit {
   schedules = signal<any[]>([]);
+  students = signal<any[]>([]);
   isLoading = signal(true);
 
   // Admin/Edit access state
@@ -26,6 +27,10 @@ export class Schedule implements OnInit {
   showModal = signal(false);
   isEditing = signal(false);
   editingId: number | null = null;
+
+  showAssignModal = signal(false);
+  selectedScheduleId: number | null = null;
+  selectedStudentId: number | null = null;
 
   newSchedule = {
     day: '',
@@ -46,6 +51,7 @@ export class Schedule implements OnInit {
 
   ngOnInit() {
     this.loadSchedules();
+    this.loadStudents();
   }
 
   loadSchedules() {
@@ -61,6 +67,16 @@ export class Schedule implements OnInit {
     });
   }
 
+  loadStudents() {
+    this.apiService.getStudents().subscribe({
+      next: (data) => {
+        this.students.set(data);
+      },
+      error: (err) => {
+        console.error('Error loading students:', err);
+      }
+    });
+  }
   // ===== PIN logic =====
   openPinModal() {
     this.pin.set('');
@@ -144,4 +160,45 @@ export class Schedule implements OnInit {
   this.showModal.set(false);
   this.showPinModal.set(false);
 }
+
+ openAssignModal(scheduleId: number) {
+    this.selectedScheduleId = scheduleId;
+    this.selectedStudentId = null;
+    this.showAssignModal.set(true);
+  }
+
+  closeAssignModal() {
+    this.showAssignModal.set(false);
+    this.selectedScheduleId = null;
+    this.selectedStudentId = null;
+  }
+
+  assignStudent() {
+    if (!this.selectedStudentId || !this.selectedScheduleId) return;
+    this.apiService.assignStudentToSchedule(
+      this.selectedStudentId,
+      this.selectedScheduleId
+    ).subscribe({
+      next: () => {
+        this.loadSchedules();
+        this.closeAssignModal();
+        console.log('Student assigned!');
+      },
+      error: (err) => console.error('Error assigning student:', err)
+    });
+  }
+
+  removeStudent(studentId: number) {
+    if (confirm('Remove this student from the schedule?')) {
+      this.apiService.assignStudentToSchedule(studentId, null).subscribe({
+        next: () => {
+          this.loadSchedules();
+          console.log('Student removed!');
+        },
+        error: (err) => console.error('Error removing student:', err)
+      });
+    }
+  }
 }
+
+

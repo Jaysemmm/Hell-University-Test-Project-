@@ -1,10 +1,9 @@
 <div class="schedule-container">
-<h1 class="schedule-title">CLASS SCHEDULE</h1>
+  <h1 class="schedule-title">CLASS SCHEDULE</h1>
 
   <button class="add-btn" *ngIf="!isAdmin()" (click)="openPinModal()">ADMIN ACCESS</button>
   <button class="add-btn" *ngIf="isAdmin()" (click)="openCreateModal()">CREATE SCHEDULE</button>
   <button class="done-btn" *ngIf="isAdmin()" (click)="exitAdminMode()">DONE</button>
-
 
   <p *ngIf="isLoading()" style="color: white; text-align: center;">Loading schedules...</p>
 
@@ -27,11 +26,16 @@
         <td>{{ s.end_time }}</td>
         <td>{{ s.room }}</td>
         <td>{{ s.instructor }}</td>
-        <td>{{ s.students.length }} student(s)</td>
-        <!-- Edit/Delete only visible if admin -->
+        <td><span *ngIf="s.students.length === 0" style="color: #888;">No students</span>
+          <div *ngFor="let student of s.students" class="student-tag">
+            {{ student.name }}
+            <button class="remove-student-btn" *ngIf="isAdmin()" (click)="removeStudent(student.id)">✕</button>
+          </div>
+        </td>
         <td *ngIf="isAdmin()">
           <button class="edit-btn" (click)="openEditModal(s)">✏️ Edit</button>
           <button class="delete-btn" (click)="deleteSchedule(s.id)">🗑️ Delete</button>
+          <button class="assign-btn" (click)="openAssignModal(s.id)">👤 Assign</button>
         </td>
       </tr>
     </tbody>
@@ -48,7 +52,6 @@
       <p style="color: #ccc; font-size: 14px; margin-bottom: 15px;">
         Enter PIN to edit, create, or delete schedules.
       </p>
-
       <input
         type="password"
         placeholder="Enter PIN"
@@ -56,9 +59,7 @@
         (input)="pin.set($any($event.target).value)"
         maxlength="4"
       />
-
       <p *ngIf="pinError()" style="color: salmon; font-size: 13px;">{{ pinError() }}</p>
-
       <div class="modal-buttons">
         <button class="save-btn" (click)="confirmPin()">CONFIRM</button>
         <button class="cancel-btn" (click)="closePinModal()">CANCEL</button>
@@ -70,24 +71,42 @@
   <div class="modal-overlay" *ngIf="showModal()">
     <div class="modal">
       <h2 class="modal-title">{{ isEditing() ? 'EDIT SCHEDULE' : 'CREATE SCHEDULE' }}</h2>
-
       <input type="text" [(ngModel)]="newSchedule.day" placeholder="Day (e.g. Monday)" />
       <input type="text" [(ngModel)]="newSchedule.start_time" placeholder="Start Time (e.g. 08:00 AM)" />
       <input type="text" [(ngModel)]="newSchedule.end_time" placeholder="End Time (e.g. 09:30 AM)" />
       <input type="text" [(ngModel)]="newSchedule.room" placeholder="Room" />
       <input type="text" [(ngModel)]="newSchedule.instructor" placeholder="Instructor" />
-
       <div class="modal-buttons">
         <button class="save-btn" (click)="saveSchedule()">✅ SAVE</button>
         <button class="cancel-btn" (click)="closeModal()">❌ CANCEL</button>
       </div>
     </div>
   </div>
-   <button class="back-btn" (click)="goHome()">← BACK</button>
-<div class="schedule-brand">
+
+  <!-- ✅ Assign Student Modal -->
+  <div class="modal-overlay" *ngIf="showAssignModal()">
+    <div class="modal">
+      <h2 class="modal-title">👤 ASSIGN STUDENT</h2>
+      <p style="color: #ccc; font-size: 14px; margin-bottom: 15px;">
+        Select a student to assign to this schedule.
+      </p>
+      <select [(ngModel)]="selectedStudentId">
+        <option [ngValue]="null" disabled>-- Select a student --</option>
+        <option *ngFor="let student of students()" [ngValue]="student.id">
+          {{ student.name }} ({{ student.department }})
+        </option>
+      </select>
+      <div class="modal-buttons">
+        <button class="save-btn" (click)="assignStudent()">✅ ASSIGN</button>
+        <button class="cancel-btn" (click)="closeAssignModal()">❌ CANCEL</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-btn" (click)="goHome()">← BACK</button>
+  <div class="schedule-brand">
     <img src="https://marketplace.canva.com/EAFMBPj86jM/1/0/800w/canva-black-white-minimalist-university-logo-design-yllDd8VHxjE.jpg" alt="University Logo" class="logo">
     <span>HELL UNIVERSITY</span>
   </div>
-
 
 </div>
