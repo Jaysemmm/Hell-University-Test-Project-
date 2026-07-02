@@ -33,7 +33,7 @@ export class Students implements OnInit {
   });
 
   // CSV import state
-csvFileName = signal('');
+ csvFileName = signal('');
   csvRows = signal<any[]>([]);
   isImporting = signal(false);
   importSummary = signal('');
@@ -112,11 +112,14 @@ csvFileName = signal('');
 
   // ===== CSV Import =====
 
+  selectedFile: File | null = null;
+
   onCsvFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
 
+    this.selectedFile = file;
     this.csvFileName.set(file.name);
     this.importSummary.set('');
 
@@ -124,62 +127,34 @@ csvFileName = signal('');
       header: true,
       skipEmptyLines: true,
       complete: (result) => {
-        this.csvRows.set(result.data as any[]);
-        console.log('Parsed CSV rows:', result.data);
+        this.csvRows.set(result.data as any[]); // still used for preview only
       },
       error: (err: any) => {
         this.importSummary.set('Failed to read CSV file: ' + err.message);
       }
     });
   }
-
-  importStudents() {
-    const rows = this.csvRows();
-    if (rows.length === 0) return;
+importStudents() {
+    const file = this.selectedFile;
+    if (!file) return;
 
     this.isImporting.set(true);
-    let successCount = 0;
-    let failCount = 0;
-    const errors: string[] = [];
-    let processed = 0;
+    const formData = new FormData();
+    formData.append('file', file);
 
-    rows.forEach((row, index) => {
-      const student = {
-        name: row.name?.trim(),
-        email: row.email?.trim(),
-        year_level: row.year_level?.trim(),
-        department: row.department?.trim(),
-        age: Number(row.age),
-        birthday: row.birthday?.trim(),
-        contact_number: row.contact_number?.trim()
-      };
-
-      this.api.register(student).subscribe({
-        next: () => {
-          successCount++;
-          processed++;
-          this.checkImportDone(processed, rows.length, successCount, failCount, errors);
-        },
-        error: (err) => {
-          failCount++;
-          processed++;
-          const msg = err.error?.message || 'Unknown error';
-          errors.push(`Row ${index + 2} (${student.email || 'no email'}): ${msg}`);
-          this.checkImportDone(processed, rows.length, successCount, failCount, errors);
-        }
-      });
+    this.api.importBatch(formData).subscribe({
+      next: (res: any) => {
+        this.isImporting.set(false);
+        this.importSummary.set(res.message || 'Import queued successfully.');
+        setTimeout(() => this.loadStudents(), 3000); // give the worker a few seconds
+      },
+      error: (err) => {
+        this.isImporting.set(false);
+        this.importSummary.set('Import failed: ' + (err.error?.message || 'Unknown error'));
+      }
     });
   }
 
- private checkImportDone(processed: number, total: number, successCount: number, failCount: number, errors: string[]) {
-    if (processed === total) {
-      this.isImporting.set(false);
-      this.importSuccessCount.set(successCount);
-      this.importErrors.set(errors);
-      this.importSummary.set(`${successCount} succeeded, ${failCount} failed.`);
-      this.loadStudents();
-    }
-  }
   exportStudents() {
     this.api.exportStudents().subscribe({
       next: (blob) => {
@@ -193,6 +168,75 @@ csvFileName = signal('');
       error: (err) => {
         console.error('Export failed:', err);
       }
+    });
+  }
+
+  selectedIds = signal<Set<number>>(new Set());
+
+  toggleSelect(id: number) {
+    const current = new Set(this.selectedIds());
+    if (current.has(id)) {
+      current.delete(id);
+    } else {
+      current.add(id);
+    }
+    this.selectedIds.set(current);
+  }
+
+  toggleSelectAll() {
+    const allIds = this.filteredStudents().map(s => s.id);
+    const allSelected = allIds.every(id => this.selectedIds().has(id));
+    if (allSelected) {
+      this.selectedIds.set(new Set());
+    } else {
+      this.selectedIds.set(new Set(allIds));
+    }
+  }
+
+  isSelected(id: number): boolean {
+    return this.selectedIds().has(id);
+  }
+
+  isAllSelected(): boolean {
+    const allIds = this.filteredStudents().map(s => s.id);
+    return allIds.length > 0 && allIds.every(id => this.selectedIds().has(id));
+  }
+  showBulkDeleteModal = signal(false);
+
+  openBulkDeleteModal() {
+    if (this.selectedIds().size > 0) {
+      this.showBulkDeleteModal.set(true);
+    }
+  }
+
+  closeBulkDeleteModal() {
+    this.showBulkDeleteModal.set(false);
+  }
+
+  confirmBulkDelete() {
+    const ids = Array.from(this.selectedIds());
+    let completed = 0;
+
+    ids.forEach(id => {
+      this.api.deleteStudent(id).subscribe({
+        next: () => {
+          completed++;
+          if (completed === ids.length) {
+            this.selectedIds.set(new Set());
+            this.showBulkDeleteModal.set(false);
+            this.loadStudents();
+          }
+        },
+        error: (err) => {
+          console.error(`Failed to delete student ${id}:`, err);
+          completed++;
+          if (completed === ids.length) {
+            this.selectedIds.set(new Set());
+            this.showBulkDeleteModal.set(false);
+            this.loadStudents();
+          }
+        }
+      });
     });
   }
   openImportModal() {
@@ -220,4 +264,5 @@ csvFileName = signal('');
     this.exportStudents();
     this.closeExportModal();
   }
+  
 }

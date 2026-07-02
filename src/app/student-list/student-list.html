@@ -64,12 +64,10 @@ Juan Dela Cruz,juan@email.com,1st Year,BS Computer Science,19,2007-03-15,0917123
       </table>
     </div>
 
-    <div *ngIf="importSummary()" class="import-result">
-  <p class="csv-summary">✓ {{ importSuccessCount() }} succeeded, ✗ {{ importErrors().length }} failed</p>
-  <ul *ngIf="importErrors().length > 0" class="error-list">
-    <li *ngFor="let error of importErrors()">{{ error }}</li>
-  </ul>
-</div>
+   <div *ngIf="importSummary()" class="import-result">
+       <p class="csv-summary">{{ importSummary() }}</p>
+       <p class="csv-note">Check the student list in a few seconds to see your imported students.</p>
+   </div>
 
     <div class="modal-buttons">
       <button
@@ -102,6 +100,12 @@ Juan Dela Cruz,juan@email.com,1st Year,BS Computer Science,19,2007-03-15,0917123
 <!-- Search -->
 <app-search-bar (searchChange)="onSearchChange($event)"></app-search-bar>
 
+<!-- Bulk actions -->
+<div *ngIf="selectedIds().size > 0" class="bulk-actions">
+  <span class="bulk-count">{{ selectedIds().size }} selected</span>
+  <button class="bulk-delete-btn" (click)="openBulkDeleteModal()">Delete Selected</button>
+</div>
+
   <!-- Loading state -->
   <p *ngIf="isLoading()" style="color: white; text-align: center;">
     Loading students...
@@ -116,6 +120,9 @@ Juan Dela Cruz,juan@email.com,1st Year,BS Computer Science,19,2007-03-15,0917123
  <table class="students-table" *ngIf="!isLoading() && filteredStudents().length > 0">
     <thead>
       <tr>
+        <th>
+          <input type="checkbox" [checked]="isAllSelected()" (change)="toggleSelectAll()" />
+        </th>
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
@@ -129,7 +136,10 @@ Juan Dela Cruz,juan@email.com,1st Year,BS Computer Science,19,2007-03-15,0917123
     </thead>
     <tbody>
       <!-- signals() to read the array -->
-      <tr *ngFor="let student of filteredStudents()">
+    <tr *ngFor="let student of filteredStudents()">
+        <td>
+          <input type="checkbox" [checked]="isSelected(student.id)" (change)="toggleSelect(student.id)" />
+        </td>
         <td>{{ student.id }}</td>
         <td>{{ student.name }}</td>
         <td>{{ student.email }}</td>
@@ -164,11 +174,24 @@ Juan Dela Cruz,juan@email.com,1st Year,BS Computer Science,19,2007-03-15,0917123
       <input type="text" [(ngModel)]="selectedStudent().contact_number" placeholder="Contact Number" />
 
       <div class="modal-buttons">
-        <button class="save-btn" (click)="saveStudent()">SAVE</button>
+     <button class="save-btn" (click)="saveStudent()">SAVE</button>
         <button class="cancel-btn" (click)="closeModal()">CANCEL</button>
       </div>
     </div>
   </div>
+
+  <!-- Bulk Delete Modal -->
+  <div class="modal-overlay" *ngIf="showBulkDeleteModal()">
+    <div class="modal">
+      <h2 class="modal-title">DELETE STUDENTS</h2>
+      <p>Are you sure you want to delete {{ selectedIds().size }} selected student(s)? This cannot be undone.</p>
+      <div class="modal-buttons">
+        <button class="cancel-btn" (click)="confirmBulkDelete()">DELETE</button>
+        <button class="save-btn" (click)="closeBulkDeleteModal()">CANCEL</button>
+      </div>
+    </div>
+  </div>
+
 <button class="back-btn" (click)="goHome()">← BACK</button>
 
 <div class="student-brand">

@@ -122,6 +122,9 @@ export class ApiService {
   exportStudents(): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/students/export`, { responseType: 'blob' });
   }
+  importBatch(formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/students/import-batch`, formData);
+  }
   
   // ===== GraphQL - Schedules only =====
   getSchedules(): Observable<any[]> {
