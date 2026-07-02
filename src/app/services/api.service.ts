@@ -119,7 +119,10 @@ export class ApiService {
   deleteStudent(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/students/${id}`);
   }
-
+  exportStudents(): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/students/export`, { responseType: 'blob' });
+  }
+  
   // ===== GraphQL - Schedules only =====
   getSchedules(): Observable<any[]> {
     return this.apollo.watchQuery({ query: GET_SCHEDULES , pollInterval:500})
