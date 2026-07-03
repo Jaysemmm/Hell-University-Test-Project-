@@ -84,6 +84,14 @@ const ASSIGN_STUDENT = gql`
   }
 `;
 
+const IMPORT_STUDENTS_CSV = gql`
+  mutation ImportStudentsCsv($file: Upload!) {
+    importStudentsCsv(file: $file) {
+      message
+    }
+  }
+`;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -122,9 +130,12 @@ export class ApiService {
   exportStudents(): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/students/export`, { responseType: 'blob' });
   }
-  importBatch(formData: FormData): Observable<any> {
-    return this.http.post(`${this.baseUrl}/students/import-batch`, formData);
-  }
+ importBatch(file: File): Observable<any> {
+  return this.apollo.mutate({
+    mutation: IMPORT_STUDENTS_CSV,
+    variables: { file }
+  });
+}
   
   // ===== GraphQL - Schedules only =====
   getSchedules(): Observable<any[]> {

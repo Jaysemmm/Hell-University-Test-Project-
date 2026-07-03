@@ -139,18 +139,17 @@ importStudents() {
     if (!file) return;
 
     this.isImporting.set(true);
-    const formData = new FormData();
-    formData.append('file', file);
 
-    this.api.importBatch(formData).subscribe({
+    this.api.importBatch(file).subscribe({
       next: (res: any) => {
         this.isImporting.set(false);
-        this.importSummary.set(res.message || 'Import queued successfully.');
+        const message = res?.data?.importStudentsCsv?.message || 'Import queued successfully.';
+        this.importSummary.set(message);
         setTimeout(() => this.loadStudents(), 3000); // give the worker a few seconds
       },
       error: (err) => {
         this.isImporting.set(false);
-        this.importSummary.set('Import failed: ' + (err.error?.message || 'Unknown error'));
+        this.importSummary.set('Import failed: ' + (err.message || 'Unknown error'));
       }
     });
   }
