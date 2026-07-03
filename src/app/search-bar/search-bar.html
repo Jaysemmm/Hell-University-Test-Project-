@@ -1,0 +1,9 @@
+<div class="search-bar-container">
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Search students by name or email..."
+    [(ngModel)]="searchText"
+    (ngModelChange)="onInputChange()"
+  />
+</div>

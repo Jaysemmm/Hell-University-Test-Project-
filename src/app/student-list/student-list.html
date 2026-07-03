@@ -2,6 +2,110 @@
 
   <h1 class="students-title">REGISTERED STUDENTS</h1>
 
+<!-- CSV Import -->
+<div class="csv-import-section">
+  <input
+    type="file"
+    accept=".csv"
+    #csvFileInput
+    (change)="onCsvFileSelected($event)"
+    style="display: none;"
+  />
+  <button class="import-btn" (click)="openImportModal()">
+    IMPORT CSV
+  </button>
+  <button class="import-btn" (click)="openExportModal()">
+    EXPORT TO EXCEL
+  </button>
+</div>
+
+<!-- Import Modal -->
+<div class="modal-overlay" *ngIf="showImportModal()">
+  <div class="modal csv-modal">
+    <h2 class="modal-title">IMPORT STUDENTS FROM CSV</h2>
+
+    <div class="csv-instructions">
+  <p>Your CSV file must have these exact column headers on the first line, followed by your data:</p>
+  <pre class="csv-template">name,email,year_level,department,age,birthday,contact_number
+Juan Dela Cruz,juan@email.com,1st Year,BS Computer Science,19,2007-03-15,09171234567</pre>
+</div>
+
+    <button class="import-btn" (click)="csvFileInput.click()">
+      {{ csvFileName() ? 'CHOOSE DIFFERENT FILE' : 'CHOOSE FILE' }}
+    </button>
+    <span *ngIf="csvFileName()" class="csv-filename">✓ {{ csvFileName() }}</span>
+
+    <!-- Preview -->
+    <div class="csv-preview" *ngIf="csvRows().length > 0 && !isImporting()">
+      <h3 class="preview-title">Preview ({{ csvRows().length }} rows)</h3>
+      <table class="preview-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Year Level</th>
+            <th>Department</th>
+            <th>Age</th>
+            <th>Birthday</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of csvRows()">
+            <td>{{ row.name }}</td>
+            <td>{{ row.email }}</td>
+            <td>{{ row.year_level }}</td>
+            <td>{{ row.department }}</td>
+            <td>{{ row.age }}</td>
+            <td>{{ row.birthday }}</td>
+            <td>{{ row.contact_number }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+   <div *ngIf="importSummary()" class="import-result">
+       <p class="csv-summary">{{ importSummary() }}</p>
+       <p class="csv-note">Check the student list in a few seconds to see your imported students.</p>
+   </div>
+
+    <div class="modal-buttons">
+      <button
+        class="save-btn"
+        *ngIf="csvRows().length > 0"
+        (click)="importStudents()"
+        [disabled]="isImporting()"
+      >
+          <span *ngIf="isImporting()" class="spinner"></span>
+         {{ isImporting() ? 'IMPORTING...' : 'CONFIRM IMPORT (' + csvRows().length + ')' }}
+      </button>
+      <button class="cancel-btn" (click)="closeImportModal()">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal-overlay" *ngIf="showExportModal()">
+  <div class="modal">
+    <h2 class="modal-title">EXPORT STUDENTS</h2>
+    <p>This will download an Excel file (.xlsx) containing all {{ students().length }} registered students.</p>
+    <div class="modal-buttons">
+      <button class="save-btn" (click)="confirmExport()">DOWNLOAD</button>
+      <button class="cancel-btn" (click)="closeExportModal()">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Search -->
+<app-search-bar (searchChange)="onSearchChange($event)"></app-search-bar>
+
+<!-- Bulk actions -->
+<div *ngIf="selectedIds().size > 0" class="bulk-actions">
+  <span class="bulk-count">{{ selectedIds().size }} selected</span>
+  <button class="bulk-delete-btn" (click)="openBulkDeleteModal()">Delete Selected</button>
+</div>
+
   <!-- Loading state -->
   <p *ngIf="isLoading()" style="color: white; text-align: center;">
     Loading students...
@@ -13,9 +117,12 @@
   </p>
 
   <!-- Table — signals use () to read value -->
-  <table class="students-table" *ngIf="!isLoading() && students().length > 0">
+ <table class="students-table" *ngIf="!isLoading() && filteredStudents().length > 0">
     <thead>
       <tr>
+        <th>
+          <input type="checkbox" [checked]="isAllSelected()" (change)="toggleSelectAll()" />
+        </th>
         <th>ID</th>
         <th>Name</th>
         <th>Email</th>
@@ -29,7 +136,10 @@
     </thead>
     <tbody>
       <!-- signals() to read the array -->
-      <tr *ngFor="let student of students()">
+    <tr *ngFor="let student of filteredStudents()">
+        <td>
+          <input type="checkbox" [checked]="isSelected(student.id)" (change)="toggleSelect(student.id)" />
+        </td>
         <td>{{ student.id }}</td>
         <td>{{ student.name }}</td>
         <td>{{ student.email }}</td>
@@ -64,11 +174,24 @@
       <input type="text" [(ngModel)]="selectedStudent().contact_number" placeholder="Contact Number" />
 
       <div class="modal-buttons">
-        <button class="save-btn" (click)="saveStudent()">SAVE</button>
+     <button class="save-btn" (click)="saveStudent()">SAVE</button>
         <button class="cancel-btn" (click)="closeModal()">CANCEL</button>
       </div>
     </div>
   </div>
+
+  <!-- Bulk Delete Modal -->
+  <div class="modal-overlay" *ngIf="showBulkDeleteModal()">
+    <div class="modal">
+      <h2 class="modal-title">DELETE STUDENTS</h2>
+      <p>Are you sure you want to delete {{ selectedIds().size }} selected student(s)? This cannot be undone.</p>
+      <div class="modal-buttons">
+        <button class="cancel-btn" (click)="confirmBulkDelete()">DELETE</button>
+        <button class="save-btn" (click)="closeBulkDeleteModal()">CANCEL</button>
+      </div>
+    </div>
+  </div>
+
 <button class="back-btn" (click)="goHome()">← BACK</button>
 
 <div class="student-brand">

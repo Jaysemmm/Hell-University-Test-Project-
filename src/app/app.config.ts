@@ -1,20 +1,20 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { InMemoryCache, ApolloLink } from '@apollo/client/core';
 import { provideApollo } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular/http';
-import { InMemoryCache } from '@apollo/client/core';
-import { inject } from '@angular/core';
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { routes } from './app.routes';
+import { authInterceptor } from './interceptors/auth.interceptor';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideApollo(() => {
-      const httpLink = inject(HttpLink);
       return {
-        link: httpLink.create({ uri: 'http://localhost:8000/graphql' }),
+        link: new UploadHttpLink({ uri: environment.graphqlUrl }) as unknown as ApolloLink,
         cache: new InMemoryCache(),
       };
     }),
