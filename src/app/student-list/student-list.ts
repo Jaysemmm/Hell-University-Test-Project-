@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../services/api.service';
-import * as Papa from 'papaparse';
+import Papa from 'papaparse';
 import { SearchBar } from '../search-bar/search-bar';
 
 @Component({
@@ -126,7 +126,8 @@ export class Students implements OnInit {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: (result) => {
+      complete: (result: any) => {
+        console.log(result);
         this.csvRows.set(result.data as any[]); // still used for preview only
       },
       error: (err: any) => {
@@ -263,5 +264,5 @@ importStudents() {
     this.exportStudents();
     this.closeExportModal();
   }
-  
+
 }

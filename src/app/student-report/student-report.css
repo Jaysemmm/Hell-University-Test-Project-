@@ -1,0 +1,133 @@
+.report-container {
+  padding: 30px;
+  color: #fff;
+  min-height: 100vh;
+  background-image: url(https://tse3.mm.bing.net/th/id/OIP.0ehNbvweAFVhwiB4zJRPjQHaEo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3);
+}
+
+.report-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+
+.search-input, .student-select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #8b0000;
+  background: #222;
+  color: #fff;
+}
+
+.printable-report {
+  background: #fff;
+  color: #000;
+  padding: 40px;
+  border-radius: 8px;
+  max-width: 800px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.info-table, .schedule-report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.info-table th, .schedule-report-table th,
+.info-table td, .schedule-report-table td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.report-page-title{
+  font-size: 60px;
+  color: #f80303;
+  margin-bottom: 30px;
+  font-family: 'Lauren';
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.429);
+
+}
+
+.print-btn {
+  margin-top: 20px;
+  padding: 10px 24px;
+  background: #8b0000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.back-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 8px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.back-btn:hover {
+  background: #f80303;
+  border-color: #f80303;
+}
+
+
+
+@media print {
+
+  .no-print {
+    display: none !important;
+  }
+
+  .report-container {
+    background: none !important;
+    padding: 0 !important;
+    color: #000 !important;
+  }
+
+  .printable-report {
+    position: relative; /* Crucial: This serves as the anchor point for the logo */
+    box-shadow: none !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    background: transparent !important;
+    min-height: 95vh; /* Ensures the container fills the page so the logo sits at the true bottom */
+  }
+
+  /* Top text header adjustments */
+  .print-only-header {
+    display: block !important;
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+
+  .school-name {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .school-tagline {
+    font-size: 14px;
+    margin: 4px 0 0 0;
+    color: #555;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}

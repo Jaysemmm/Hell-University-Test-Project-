@@ -49,7 +49,7 @@
 }
 
 .register-background {
-  background-image :url(https://img.freepik.com/free-photo/horror-scene-with-eerie-classroom_23-2150975102.jpg?semt=ais_hybrid);
+  background-image :url(https://img.freepik.com/free-photo/horror-scene-with-eerie-classroom_23-2150975102.jpg?semt=ais_hybrid) !important;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

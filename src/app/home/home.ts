@@ -37,6 +37,10 @@ export class Home {
   this.router.navigate(['/schedule']);
 }
 
+goToForm() {
+  this.router.navigate(['/form']);
+}
+
  confirmPin(){
   if (this.pin() === this.correctPIn){
     this.showPinModal.set(false);
@@ -52,5 +56,5 @@ export class Home {
   this.pin.set('');
   this.pinError.set('');
  }
-}
 
+}

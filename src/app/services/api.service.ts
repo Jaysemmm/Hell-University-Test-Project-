@@ -76,8 +76,17 @@ const DELETE_SCHEDULE = gql`
 `;
 
 const ASSIGN_STUDENT = gql`
-  mutation AssignStudentToSchedule($id: ID!, $schedule_id: ID) {
-    assignStudentToSchedule(id: $id, schedule_id: $schedule_id) {
+  mutation AssignStudentToSchedule($user_id: ID!, $schedule_id: ID!) {
+    assignStudentToSchedule(user_id: $user_id, schedule_id: $schedule_id) {
+      id
+      name
+    }
+  }
+`;
+
+const UNASSIGN_STUDENT = gql`
+  mutation UnassignStudentFromSchedule($user_id: ID!, $schedule_id: ID!) {
+    unassignStudentFromSchedule(user_id: $user_id, schedule_id: $schedule_id) {
       id
       name
     }
@@ -88,6 +97,29 @@ const IMPORT_STUDENTS_CSV = gql`
   mutation ImportStudentsCsv($file: Upload!) {
     importStudentsCsv(file: $file) {
       message
+    }
+  }
+`;
+
+const GET_STUDENT_REPORT = gql`
+  query GetStudentReport($id: ID!) {
+    student(id: $id) {
+      id
+      name
+      email
+      year_level
+      department
+      age
+      birthday
+      contact_number
+      schedules {
+        id
+        day
+        start_time
+        end_time
+        room
+        instructor
+      }
     }
   }
 `;
@@ -136,7 +168,8 @@ export class ApiService {
     variables: { file }
   });
 }
-  
+
+
   // ===== GraphQL - Schedules only =====
   getSchedules(): Observable<any[]> {
     return this.apollo.watchQuery({ query: GET_SCHEDULES , pollInterval:500})
@@ -171,13 +204,33 @@ export class ApiService {
     });
   }
 
- assignStudentToSchedule(studentId: number, scheduleId: number | null) {
-  return this.apollo.mutate({
-    mutation: ASSIGN_STUDENT,
-    variables: {
-      id: studentId,
-      schedule_id: scheduleId
-    }
-  });
+  assignStudentToSchedule(studentId: number, scheduleId: number) {
+    return this.apollo.mutate({
+      mutation: ASSIGN_STUDENT,
+      variables: { user_id: studentId, schedule_id: scheduleId }
+    });
+  }
+
+unassignStudentFromSchedule(studentId: number, scheduleId: number) {
+    return this.apollo.mutate({
+      mutation: UNASSIGN_STUDENT,
+      variables: { user_id: studentId, schedule_id: scheduleId }
+    });
+  }
+
+
+// ===== GraphQL - Student Report ===== //
+getStudentReport(id: number): Observable<any> {
+  return this.apollo.query({
+    query: GET_STUDENT_REPORT,
+    variables: { id },
+    fetchPolicy: 'network-only',
+  }).pipe(
+    map((result: any) => result.data?.student ?? null)
+  );
+}
+
+getStudentReportPdfUrl(id: number): string {
+  return `${this.baseUrl}/students/${id}/report-pdf`;
 }
 }

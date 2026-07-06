@@ -1,0 +1,80 @@
+<div class="report-container">
+
+  <h1 class="report-page-title no-print">STUDENT REPORT</h1>
+
+  <div class="report-controls no-print">
+    <input
+      type="text"
+      placeholder="Search student by name or email..."
+      [value]="searchTerm()"
+      (input)="searchTerm.set($any($event.target).value)"
+      class="search-input"
+    />
+
+    <select (change)="onSelectStudent(+$any($event.target).value)" class="student-select">
+      <option value="">-- Select a student --</option>
+      <option *ngFor="let s of filteredStudents()" [value]="s.id">
+        {{ s.name }} ({{ s.email }})
+      </option>
+    </select>
+  </div>
+
+  <p *ngIf="isLoading()" class="no-print">Loading report...</p>
+
+  <div class="printable-report" *ngIf="report() && !isLoading()">
+
+    <div class="print-only-header">
+      <div class="school-info">
+        <h1 class="school-name">HELL UNIVERSITY</h1>
+        <p class="school-tagline">Office of the Registrar</p>
+      </div>
+    </div>
+
+    <div class="report-header">
+      <h2>Student Form</h2>
+      <p class="report-date">Generated: {{ today | date:'longDate' }}</p>
+    </div>
+
+    <section class="report-section">
+      <h3>Student Information</h3>
+      <table class="info-table">
+        <tr><th>Name</th><td>{{ report().name }}</td></tr>
+        <tr><th>Email</th><td>{{ report().email }}</td></tr>
+        <tr><th>Year Level</th><td>{{ report().year_level }}</td></tr>
+        <tr><th>Department</th><td>{{ report().department }}</td></tr>
+        <tr><th>Age</th><td>{{ report().age }}</td></tr>
+        <tr><th>Birthday</th><td>{{ report().birthday }}</td></tr>
+        <tr><th>Contact Number</th><td>{{ report().contact_number }}</td></tr>
+      </table>
+    </section>
+
+    <section class="report-section">
+      <h3>Assigned Schedules</h3>
+      <table class="schedule-report-table" *ngIf="report().schedules.length > 0">
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Room</th>
+            <th>Instructor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sch of report().schedules">
+            <td>{{ sch.day }}</td>
+            <td>{{ sch.start_time }}</td>
+            <td>{{ sch.end_time }}</td>
+            <td>{{ sch.room }}</td>
+            <td>{{ sch.instructor }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="report().schedules.length === 0">No schedules assigned.</p>
+    </section>
+
+    <button class="print-btn no-print" (click)="downloadPdfReport()">📄 Download PDF Report</button>
+  </div>
+
+  <button class="back-btn no-print" (click)="goHome()">← BACK</button>
+</div>

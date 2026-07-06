@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,11 +10,12 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './search-bar.css'
 })
 export class SearchBar {
-  searchText = '';
-
   @Output() searchChange = new EventEmitter<string>();
 
-  onInputChange() {
-    this.searchChange.emit(this.searchText);
+  searchTerm = '';
+
+  onInput(value: string) {
+    this.searchTerm = value;
+    this.searchChange.emit(value);
   }
 }

@@ -188,17 +188,17 @@ export class Schedule implements OnInit {
     });
   }
 
-  removeStudent(studentId: number) {
-    if (confirm('Remove this student from the schedule?')) {
-      this.apiService.assignStudentToSchedule(studentId, null).subscribe({
-        next: () => {
-          this.loadSchedules();
-          console.log('Student removed!');
-        },
-        error: (err) => console.error('Error removing student:', err)
-      });
-    }
+  removeStudent(studentId: number, scheduleId: number) {
+  if (confirm('Remove this student from the schedule?')) {
+    this.apiService.unassignStudentFromSchedule(studentId, scheduleId).subscribe({
+      next: () => {
+        this.loadSchedules();
+        console.log('Student removed!');
+      },
+      error: (err) => console.error('Error removing student:', err)
+    });
   }
+}
 }
 
 

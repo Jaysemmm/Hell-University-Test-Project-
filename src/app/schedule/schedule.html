@@ -29,7 +29,7 @@
         <td><span *ngIf="s.students.length === 0" style="color: #888;">No students</span>
           <div *ngFor="let student of s.students" class="student-tag">
             {{ student.name }}
-            <button class="remove-student-btn" *ngIf="isAdmin()" (click)="removeStudent(student.id)">✕</button>
+            <button class="remove-student-btn" *ngIf="isAdmin()" (click)="removeStudent(student.id, s.id)">✕</button>
           </div>
         </td>
         <td *ngIf="isAdmin()">
